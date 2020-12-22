@@ -1,0 +1,60 @@
+#include<stdio.h>  
+#include<stdlib.h>  
+  
+struct Node  
+{  
+    int data;  
+    struct Node* next;  
+};  
+  
+void printMiddle(struct Node *head)  
+{  
+    struct Node *ptr1=head;  
+    struct Node *ptr2=head;  
+  
+    if(head!=NULL)  
+    {  
+        while(ptr1!=NULL&&ptr2->next!=NULL)  
+        {  
+            ptr2=ptr2->next->next;  
+            ptr1=ptr1->next;  
+        }  
+        printf("The middle element is [%d]\n\n",ptr1->data);  
+    }  
+}  
+  
+void push(struct Node** head_ref, int newData)  
+{  
+    struct Node* newNode=(struct Node*)malloc(sizeof(struct Node));  
+
+    newNode->data=newData;  
+  
+    newNode->next=(*head_ref);  
+  
+    (*head_ref)=newNode;  
+}  
+   
+void printList(struct Node *ptr)  
+{  
+    while(ptr!=NULL)  
+    {  
+        printf("%d->",ptr->data);  
+        ptr=ptr->next;  
+    }  
+    printf("NULL\n");  
+}  
+  
+int main()  
+{  
+    struct Node* head =NULL;  
+    int i;  
+  
+    for(i=7; i>2;i--)  
+    {  
+        push(&head,i);    
+    }  
+    printList(head);
+     printMiddle(head);  
+  
+    return 0;  
+} 
