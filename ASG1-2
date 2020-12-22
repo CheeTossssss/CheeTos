@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node{
+  int value;//Store node's value
+  Node *next;//node's next pointer
+};//*head,*tail,*curr;//global head,tail,and current
+
+void pushTail(Node** headref,int newData){
+  /*1. allocate node*/
+  Node* newNode=(Node*)malloc(sizeof(Node));
+  Node *last=*headref;/*used in step 5*/
+  /* 2.put in the data*/
+  newNode->value=newData;
+  /*3.This new node is going to be
+  the last node,somake next of
+  it as NULL*/
+  newNode->next=NULL;
+  /*4.If the linked list is empty,
+  then make the new node as head*/
+  if(*headref==NULL){
+    *headref=newNode;
+    return;
+  }
+  /*5.else traverse till the last node*/
+  while(last->next!=NULL){
+    last=last->next;
+    /*6.change the next of the last node*/
+    last->next=newNode;
+    return;
+  }
+}
+bool cyclecheck(Node *a){
+  Node *storage=NULL;//storing values
+  bool flag2=false;
+  while(a!=NULL){
+    Node *temp=storage;
+    while(temp){//check inside of themp one by one
+      if(temp->value==a->value){//if we found any duplicate/cycle
+        if(temp->next!=NULL){//if its's not in the last node
+          return true;
+        }
+      }
+      temp=temp->next;//next node of temp
+    }
+    pushTail(&storage,a->value);//add a->value to storage,more numbers to check
+    a=a->next;//next node of a
+  }
+  return false;
+}
+void createcycle(Node **a){
+  Node *last=*a;
+  while(last->next!=NULL){//traverse till last node
+    last=last->next;
+  }
+  last->next=*a;//set cycle
+}
+int main()
+{
+  struct Node *a=NULL;
+  int N;
+  printf("insert n: ");
+  scanf("%d",&N);
+  int x;
+  printf("Inser %d number(s) (0-100000): ",N);
+  bool check[10000]={0};
+  for(int i=0;i<N;i++){
+    scanf("%d",&x);
+    pushTail(&a,x);
+    if(check[x]){//if there's duplicate,create cycle
+      createcycle(&a);
+    }
+    check[x]=true;
+  }
+  bool flag=cyclecheck(a);
+  if(flag)printf("cycle found!\n");
+  else printf("no cycle found!\n");
+  return 0;
+}
+
+  
